@@ -1,35 +1,47 @@
 CHIP ModCounter16 {
-    IN  in[16],       // modulo
+    IN  in[16],       // modulo N
         init[16],     // valor inicial
         load,         // cargar init
         rst;          // reset
     OUT out[16],      // contador actual
-        wrap;         // indica reinicio
-
+        wrap;         // se activa al reinicio
+//curr es el puntero o indice
+//wrap es la regla de comportamiento
+//Si wrap = 1 verdadero
+//si wrap= 2 falso
     PARTS:
 
-    // Incrementar valor actual
-    Inc16(in=curr, out=incVal);
+    // =========================
+    // Registro del contador
+    // =========================
+    Register(in=nextVal, load=true, out=curr);
 
-    // Comparar incVal con modulo (in)
-    Xor(a=incVal[0],  b=in[0],  out=d0);
-    Xor(a=incVal[1],  b=in[1],  out=d1);
-    Xor(a=incVal[2],  b=in[2],  out=d2);
-    Xor(a=incVal[3],  b=in[3],  out=d3);
-    Xor(a=incVal[4],  b=in[4],  out=d4);
-    Xor(a=incVal[5],  b=in[5],  out=d5);
-    Xor(a=incVal[6],  b=in[6],  out=d6);
-    Xor(a=incVal[7],  b=in[7],  out=d7);
-    Xor(a=incVal[8],  b=in[8],  out=d8);
-    Xor(a=incVal[9],  b=in[9],  out=d9);
-    Xor(a=incVal[10], b=in[10], out=d10);
-    Xor(a=incVal[11], b=in[11], out=d11);
-    Xor(a=incVal[12], b=in[12], out=d12);
-    Xor(a=incVal[13], b=in[13], out=d13);
-    Xor(a=incVal[14], b=in[14], out=d14);
-    Xor(a=incVal[15], b=in[15], out=d15);
+    // =========================
+    // Comparar curr con N-1 para activar wrap
+    // =========================
+    // Nminus1 = in - 1
+    Not16(in=false, out=minus1);          // 0xFFFF = -1
+    Add16(a=in, b=minus1, out=Nminus1);
 
-    // Detectar igualdad (si todos los XOR dan 0)
+    // XOR curr vs N-1
+    Xor(a=curr[0],  b=Nminus1[0],  out=d0);
+    Xor(a=curr[1],  b=Nminus1[1],  out=d1);
+    Xor(a=curr[2],  b=Nminus1[2],  out=d2);
+    Xor(a=curr[3],  b=Nminus1[3],  out=d3);
+    Xor(a=curr[4],  b=Nminus1[4],  out=d4);
+    Xor(a=curr[5],  b=Nminus1[5],  out=d5);
+    Xor(a=curr[6],  b=Nminus1[6],  out=d6);
+    Xor(a=curr[7],  b=Nminus1[7],  out=d7);
+    Xor(a=curr[8],  b=Nminus1[8],  out=d8);
+    Xor(a=curr[9],  b=Nminus1[9],  out=d9);
+    Xor(a=curr[10], b=Nminus1[10], out=d10);
+    Xor(a=curr[11], b=Nminus1[11], out=d11);
+    Xor(a=curr[12], b=Nminus1[12], out=d12);
+    Xor(a=curr[13], b=Nminus1[13], out=d13);
+    Xor(a=curr[14], b=Nminus1[14], out=d14);
+    Xor(a=curr[15], b=Nminus1[15], out=d15);
+
+    // OR en árbol para detectar igualdad
     Or(a=d0, b=d1, out=o1);
     Or(a=d2, b=d3, out=o2);
     Or(a=d4, b=d5, out=o3);
@@ -49,22 +61,21 @@ CHIP ModCounter16 {
 
     Or(a=o13, b=o14, out=diff);
 
-    Not(in=diff, out=equal);
+    Not(in=diff, out=wrap);  // wrap=1 cuando curr == N-1
 
-    // wrap se activa cuando se reinicia por modulo
-    And(a=equal, b=true, out=wrap);
+    // =========================
+    // Incremento
+    // =========================
+    Inc16(in=curr, out=incVal);
 
-    // Si llega al modulo → volver a 0
-    Mux16(a=incVal, b=false, sel=equal, out=afterMod);
+    // Si wrap → reiniciar a 0
+    Mux16(a=incVal, b=false, sel=wrap, out=afterMod);
 
-    // Si load = 1 → cargar init
+    // Si load=1 → cargar init
     Mux16(a=afterMod, b=init, sel=load, out=afterLoad);
 
-    // Si rst = 1 → 0
+    // Si rst=1 → reiniciar a 0
     Mux16(a=afterLoad, b=false, sel=rst, out=nextVal);
 
-    // Registro
-    Register(in=nextVal, load=true, out=curr);
-
+    // Salida final
     And16(a=curr, b=true, out=out);
-}
