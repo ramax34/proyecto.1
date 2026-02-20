@@ -1,0 +1,70 @@
+CHIP ModCounter16 {
+    IN  in[16],       // modulo
+        init[16],     // valor inicial
+        load,         // cargar init
+        rst;          // reset
+    OUT out[16],      // contador actual
+        wrap;         // indica reinicio
+
+    PARTS:
+
+    // Incrementar valor actual
+    Inc16(in=curr, out=incVal);
+
+    // Comparar incVal con modulo (in)
+    Xor(a=incVal[0],  b=in[0],  out=d0);
+    Xor(a=incVal[1],  b=in[1],  out=d1);
+    Xor(a=incVal[2],  b=in[2],  out=d2);
+    Xor(a=incVal[3],  b=in[3],  out=d3);
+    Xor(a=incVal[4],  b=in[4],  out=d4);
+    Xor(a=incVal[5],  b=in[5],  out=d5);
+    Xor(a=incVal[6],  b=in[6],  out=d6);
+    Xor(a=incVal[7],  b=in[7],  out=d7);
+    Xor(a=incVal[8],  b=in[8],  out=d8);
+    Xor(a=incVal[9],  b=in[9],  out=d9);
+    Xor(a=incVal[10], b=in[10], out=d10);
+    Xor(a=incVal[11], b=in[11], out=d11);
+    Xor(a=incVal[12], b=in[12], out=d12);
+    Xor(a=incVal[13], b=in[13], out=d13);
+    Xor(a=incVal[14], b=in[14], out=d14);
+    Xor(a=incVal[15], b=in[15], out=d15);
+
+    // Detectar igualdad (si todos los XOR dan 0)
+    Or(a=d0, b=d1, out=o1);
+    Or(a=d2, b=d3, out=o2);
+    Or(a=d4, b=d5, out=o3);
+    Or(a=d6, b=d7, out=o4);
+    Or(a=d8, b=d9, out=o5);
+    Or(a=d10, b=d11, out=o6);
+    Or(a=d12, b=d13, out=o7);
+    Or(a=d14, b=d15, out=o8);
+
+    Or(a=o1, b=o2, out=o9);
+    Or(a=o3, b=o4, out=o10);
+    Or(a=o5, b=o6, out=o11);
+    Or(a=o7, b=o8, out=o12);
+
+    Or(a=o9, b=o10, out=o13);
+    Or(a=o11, b=o12, out=o14);
+
+    Or(a=o13, b=o14, out=diff);
+
+    Not(in=diff, out=equal);
+
+    // wrap se activa cuando se reinicia por modulo
+    And(a=equal, b=true, out=wrap);
+
+    // Si llega al modulo → volver a 0
+    Mux16(a=incVal, b=false, sel=equal, out=afterMod);
+
+    // Si load = 1 → cargar init
+    Mux16(a=afterMod, b=init, sel=load, out=afterLoad);
+
+    // Si rst = 1 → 0
+    Mux16(a=afterLoad, b=false, sel=rst, out=nextVal);
+
+    // Registro
+    Register(in=nextVal, load=true, out=curr);
+
+    And16(a=curr, b=true, out=out);
+}
