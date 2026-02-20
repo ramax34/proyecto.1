@@ -8,7 +8,7 @@ CHIP ModCounter16 {
 //curr es el puntero o indice
 //wrap es la regla de comportamiento
 //Si wrap = 1 verdadero
-//si wrap= 2 falso
+//si wrap= 0 falso
     PARTS:
 
     // =========================
@@ -41,7 +41,7 @@ CHIP ModCounter16 {
     Xor(a=curr[14], b=Nminus1[14], out=d14);
     Xor(a=curr[15], b=Nminus1[15], out=d15);
 
-    // OR en árbol para detectar igualdad
+    // OR construido en un árbol para detectar igualdad
     Or(a=d0, b=d1, out=o1);
     Or(a=d2, b=d3, out=o2);
     Or(a=d4, b=d5, out=o3);
