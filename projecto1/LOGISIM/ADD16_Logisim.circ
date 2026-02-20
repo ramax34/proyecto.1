@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project source="logisim-evolution" version="3.8.0">
+  <circuit name="ADD16">
+    
+    <!-- Input A -->
+    <comp lib="0" name="Pin">
+      <a name="facing" val="east"/>
+      <a name="output" val="false"/>
+      <a name="width" val="16"/>
+      <a name="label" val="A"/>
+      <a name="loc" val="(80,120)"/>
+    </comp>
+    
+    <!-- Input B -->
+    <comp lib="0" name="Pin">
+      <a name="facing" val="east"/>
+      <a name="output" val="false"/>
+      <a name="width" val="16"/>
+      <a name="label" val="B"/>
+      <a name="loc" val="(80,200)"/>
+    </comp>
+
+    <!-- 16-bit Adder -->
+    <comp lib="2" name="Adder">
+      <a name="width" val="16"/>
+      <a name="loc" val="(240,160)"/>
+    </comp>
+
+    <!-- Output SUM -->
+    <comp lib="0" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="width" val="16"/>
+      <a name="label" val="SUM"/>
+      <a name="loc" val="(400,160)"/>
+    </comp>
+
+    <!-- Wiring -->
+    <wire from="(100,120)" to="(220,140)"/>
+    <wire from="(100,200)" to="(220,180)"/>
+    <wire from="(260,160)" to="(380,160)"/>
+
+  </circuit>
+</project>

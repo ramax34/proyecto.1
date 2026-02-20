@@ -1,0 +1,51 @@
+CHIP MiniComputer {
+    IN  in[16],        // dato externo
+        loadMem,       // guardar en memoria
+        loadReg,       // guardar en registro
+        reset;         // reset PC
+    OUT out[16];       // salida de la ALU
+
+    PARTS:
+
+    // =====================
+    // REGISTRO
+    // =====================
+    Register(in=in, load=loadReg, out=regOut);
+
+    // =====================
+    // MEMORIA 4K
+    // =====================
+    RAM4K(in=regOut,
+          load=loadMem,
+          address=pcOut[0..11],
+          out=memOut);
+
+    // =====================
+    // ALU
+    // Operación básica: suma
+    // zx=0 nx=0 zy=0 ny=0 f=1 no=0  => x + y
+    // =====================
+    ALU(x=regOut,
+        y=memOut,
+        zx=false,
+        nx=false,
+        zy=false,
+        ny=false,
+        f=true,
+        no=false,
+        out=aluOut,
+        zr=zr,
+        ng=ng);
+
+    // =====================
+    // PROGRAM COUNTER
+    // =====================
+    PC(in=aluOut,
+       load=false,
+       inc=true,
+       reset=reset,
+       out=pcOut);
+
+    // Salida final
+    And16(a=aluOut, b=true, out=out);
+}

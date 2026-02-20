@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project source="logisim-evolution" version="3.8.0">
+  <circuit name="HalfAdder">
+
+    <!-- Inputs -->
+    <comp lib="0" name="Pin">
+      <a name="facing" val="east"/>
+      <a name="output" val="false"/>
+      <a name="label" val="A"/>
+      <a name="loc" val="(80,120)"/>
+    </comp>
+
+    <comp lib="0" name="Pin">
+      <a name="facing" val="east"/>
+      <a name="output" val="false"/>
+      <a name="label" val="B"/>
+      <a name="loc" val="(80,200)"/>
+    </comp>
+
+    <!-- XOR (Sum) -->
+    <comp lib="1" name="XOR Gate">
+      <a name="loc" val="(220,140)"/>
+    </comp>
+
+    <!-- AND (Carry) -->
+    <comp lib="1" name="AND Gate">
+      <a name="loc" val="(220,240)"/>
+    </comp>
+
+    <!-- Outputs -->
+    <comp lib="0" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="label" val="Sum"/>
+      <a name="loc" val="(380,140)"/>
+    </comp>
+
+    <comp lib="0" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="label" val="Carry"/>
+      <a name="loc" val="(380,240)"/>
+    </comp>
+
+    <!-- Wiring -->
+    <wire from="(100,120)" to="(200,130)"/>
+    <wire from="(100,200)" to="(200,150)"/>
+    <wire from="(240,140)" to="(360,140)"/>
+
+    <wire from="(100,120)" to="(200,230)"/>
+    <wire from="(100,200)" to="(200,250)"/>
+    <wire from="(240,240)" to="(360,240)"/>
+
+  </circuit>
+</project>

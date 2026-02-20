@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project source="logisim-evolution" version="3.8.0">
+  <circuit name="FullAdder">
+
+    <!-- Inputs -->
+    <comp lib="0" name="Pin">
+      <a name="facing" val="east"/>
+      <a name="output" val="false"/>
+      <a name="label" val="A"/>
+      <a name="loc" val="(80,100)"/>
+    </comp>
+
+    <comp lib="0" name="Pin">
+      <a name="facing" val="east"/>
+      <a name="output" val="false"/>
+      <a name="label" val="B"/>
+      <a name="loc" val="(80,160)"/>
+    </comp>
+
+    <comp lib="0" name="Pin">
+      <a name="facing" val="east"/>
+      <a name="output" val="false"/>
+      <a name="label" val="Cin"/>
+      <a name="loc" val="(80,220)"/>
+    </comp>
+
+    <!-- XOR1 -->
+    <comp lib="1" name="XOR Gate">
+      <a name="loc" val="(200,130)"/>
+    </comp>
+
+    <!-- XOR2 (Sum) -->
+    <comp lib="1" name="XOR Gate">
+      <a name="loc" val="(320,130)"/>
+    </comp>
+
+    <!-- AND1 -->
+    <comp lib="1" name="AND Gate">
+      <a name="loc" val="(200,220)"/>
+    </comp>
+
+    <!-- AND2 -->
+    <comp lib="1" name="AND Gate">
+      <a name="loc" val="(200,280)"/>
+    </comp>
+
+    <!-- OR (Carry Out) -->
+    <comp lib="1" name="OR Gate">
+      <a name="loc" val="(340,250)"/>
+    </comp>
+
+    <!-- Outputs -->
+    <comp lib="0" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="label" val="Sum"/>
+      <a name="loc" val="(440,130)"/>
+    </comp>
+
+    <comp lib="0" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="label" val="Cout"/>
+      <a name="loc" val="(440,250)"/>
+    </comp>
+
+    <!-- Wiring -->
+    <wire from="(100,100)" to="(180,110)"/>
+    <wire from="(100,160)" to="(180,150)"/>
+    <wire from="(220,130)" to="(300,110)"/>
+    <wire from="(100,220)" to="(300,150)"/>
+    <wire from="(340,130)" to="(420,130)"/>
+
+    <wire from="(100,100)" to="(180,210)"/>
+    <wire from="(100,160)" to="(180,230)"/>
+    <wire from="(100,220)" to="(180,290)"/>
+    <wire from="(220,130)" to="(180,270)"/>
+
+    <wire from="(220,220)" to="(320,230)"/>
+    <wire from="(220,280)" to="(320,270)"/>
+    <wire from="(360,250)" to="(420,250)"/>
+
+  </circuit>
+</project>
