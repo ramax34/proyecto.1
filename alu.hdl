@@ -1,0 +1,36 @@
+CHIP ALU {
+    IN  x[16], y[16],
+        zx, nx, zy, ny, f, no;
+
+    OUT out[16], zr, ng;
+
+    PARTS:
+
+    // X
+    Mux16(a=x, b=false, sel=zx, out=x1);
+    Not16(in=x1, out=nx1);
+    Mux16(a=x1, b=nx1, sel=nx, out=x2);
+
+    // Y
+    Mux16(a=y, b=false, sel=zy, out=y1);
+    Not16(in=y1, out=ny1);
+    Mux16(a=y1, b=ny1, sel=ny, out=y2);
+
+    // Función principal
+    And16(a=x2, b=y2, out=andOut);
+    Add16(a=x2, b=y2, out=addOut);
+    Mux16(a=andOut, b=addOut, sel=f, out=fOut);
+
+    // Negación final → DIRECTO A out
+    Not16(in=fOut, out=notOut);
+    Mux16(a=fOut, b=notOut, sel=no, out=out,out[0..7]=outlc,out[8..15]=outnc,out[15]=outkc);
+
+    // Flag zr
+    Or8Way(in=outlc, out=o1);
+    Or8Way(in=outnc, out=o2);
+    Or(a=o1, b=o2, out=o3);
+    Not(in=o3, out=zr);
+
+    // Flag ng
+    Or(a=false, b=outkc, out=ng);
+}
